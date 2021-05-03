@@ -7,7 +7,7 @@ import * as api from '@aws-cdk/aws-apigatewayv2'
 let env = {
   "DB_NAME": "ruuvi",
   "TABLE_NAME": "sensors",
-  "AWS_DATA_PATH": "$AWS_DATA_PATH:./models",
+  "TIMESTREAM_REGION": "us-east-1"
 }
 
 export class CdkStack extends cdk.Stack {
@@ -49,7 +49,7 @@ export class CdkStack extends cdk.Stack {
     
     let rule = new iot.CfnTopicRule(this, 'ruuviToTimestream', {
       topicRulePayload: {
-        sql: "SELECT topic(2) as location, 'home' as site, * from 'ruuvi/+'",
+        sql: "SELECT topic(2) as d_location, 'home' as d_site, * from 'd/+'",
         awsIotSqlVersion: '2016-03-23',
         ruleDisabled: false,
         description: 'Enriches and send the Ruuvi tag messages to a Lambda function to TimeStream',
